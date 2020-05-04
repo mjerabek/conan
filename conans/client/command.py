@@ -24,6 +24,7 @@ from conans.model.ref import ConanFileReference, PackageReference, get_reference
     check_valid_ref
 from conans.unicode import get_cwd
 from conans.util.config_parser import get_bool_from_text
+from conans.util.env_reader import get_env
 from conans.util.files import exception_message_safe
 from conans.util.files import save
 from conans.util.log import logger
@@ -2028,6 +2029,9 @@ class Command(object):
             ret_code = ERROR_INVALID_CONFIGURATION
             self._out.error(exc)
         except ConanException as exc:
+            if get_env("CONAN_VERBOSE_TRACEBACK", False):
+                import traceback
+                print(traceback.format_exc())
             ret_code = ERROR_GENERAL
             self._out.error(exc)
         except Exception as exc:
